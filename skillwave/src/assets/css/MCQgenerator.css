@@ -1,13 +1,14 @@
 .mcq-generator {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh; /* Ensures full viewport height */
 }
 
 .mcq-generator-content {
   padding: 2rem;
   background-color: #f4f4f4;
   text-align: center;
+  flex: 1; /* This allows the content area to expand and push the footer down */
 }
 
 .mcq-generator h1 {
@@ -25,18 +26,30 @@
 }
 
 .generate-button {
-  background-color: #007bff;
+  background: linear-gradient(45deg, #007bff, #0056b3); /* Gradient for more modern look */
   color: #fff;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px; /* Rounded edges for a more sleek design */
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
 .generate-button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(45deg, #0056b3, #003c73); /* Darker gradient on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* More prominent shadow on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
 }
+
+.generate-button:disabled {
+  background-color: #b0c4de; /* Lighter background when disabled */
+  cursor: not-allowed; /* Change cursor to indicate the button is disabled */
+  box-shadow: none; /* Remove shadow when disabled */
+}
+
 
 .mcq-list {
   margin-top: 2rem;
@@ -58,4 +71,37 @@
 
 .mcq-item li {
   margin: 5px 0;
+}
+
+/* Footer Styling */
+
+.download-button {
+  background: linear-gradient(45deg, #28a745, #218838); 
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+}
+
+.download-button:hover {
+  background: linear-gradient(45deg, #218838, #1c7430);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.download-button:disabled {
+  background-color: #b0c4de;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+footer {
+  margin-top: auto; /* Ensures footer stays at the bottom */
 }

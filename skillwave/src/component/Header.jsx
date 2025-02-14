@@ -1,29 +1,30 @@
 import React, { useState } from "react";
 import "../assets/css/Header.css";
-import SignIn from "../pages/Signin"; // Import the SignIn component
+import SignIn from "../pages/Signin";
 
-const Header = () => {
+const Header = ({ onSignupClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Function to open the modal
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
-  // Function to close the modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
 
   return (
     <header className="header">
-      <div className="logo">Skillwave</div>
-      <button className="sign-in-button" onClick={openModal}>
-        Sign In
+      <div className="logo">
+        <span className="logo-text">Skillwave</span>
+        <span className="logo-highlight"></span>
+      </div>
+      <button className="sign-in-button" onClick={onSignupClick}>
+        <span>Sign Up</span>
+        <span className="button-hover-effect"></span>
       </button>
 
-      {/* Modal for SignIn */}
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
             <button className="close-button" onClick={closeModal}>
@@ -32,7 +33,7 @@ const Header = () => {
             <SignIn closeModal={closeModal} />
           </div>
         </div>
-      )}
+      )} */}
     </header>
   );
 };

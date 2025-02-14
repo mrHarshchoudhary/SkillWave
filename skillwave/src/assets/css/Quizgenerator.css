@@ -58,4 +58,29 @@
 
 .quiz-item li {
   margin: 5px 0;
+}/* Download Button Styling for Quiz Generator (PDF) - Bottom Center */
+.download-pdf-button {
+  background: linear-gradient(45deg, #28a745, #218838); 
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+}
+
+.download-pdf-button:hover {
+  background: linear-gradient(45deg, #218838, #1c7430);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.download-pdf-button:disabled {
+  background-color: #b0c4de;
+  cursor: not-allowed;
+  box-shadow: none;
 }

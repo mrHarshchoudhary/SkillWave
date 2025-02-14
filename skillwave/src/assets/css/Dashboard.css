@@ -2,63 +2,177 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  font-family: 'Arial', sans-serif;
 }
 
 .dashboard-content {
   flex-grow: 1;
   padding: 2rem;
-  background-color: #f4f4f4;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .dashboard-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
+  color: #2c3e50;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .dashboard-description {
   font-size: 1.2rem;
-  color: #555;
+  color: #34495e;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  padding: 1rem;
+}
+/* Profile Icon and Dropdown Styles */
+.profile-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
 }
 
-.card {
+.profile-icon {
+  cursor: pointer;
+  color: #3498db;
+  transition: transform 0.3s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  width: 200px;
 }
 
-.card h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+.profile-dropdown-item {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #333;
 }
 
-.card p {
-  font-size: 1rem;
-  color: #777;
-  margin-bottom: 1.5rem;
-}
-
-.card-button {
-  background-color: #007bff;
+.logout-button {
+  background-color: #e74c3c;
   color: #fff;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+}
+
+.signin-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #3498db;
+  color: #fff;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease;
+}
+
+.signin-button:hover {
+  background-color: #2980b9;
+}
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+}
+
+.card-button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .card-button:hover {
-  background-color: #0056b3;
+  background-color: #2980b9;
   transform: scale(1.05);
+}
+
+/* Custom Card Backgrounds */
+.card-mcq {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff;
+}
+
+.card-mcq h2,
+.card-mcq p {
+  color: #fff;
+}
+
+.card-quiz {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: #fff;
+}
+
+.card-quiz h2,
+.card-quiz p {
+  color: #fff;
+}
+
+.card-interview {
+  background: linear-gradient(135deg, #02aab0, #00cdac);
+  color: #fff;
+}
+
+.card-interview h2,
+.card-interview p {
+  color: #fff;
 }

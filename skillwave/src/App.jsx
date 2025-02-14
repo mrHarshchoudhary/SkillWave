@@ -8,6 +8,7 @@ import LongShortGenerator from "./pages/Learningmodule/LongSortgenerator";
 import MCQGenerator from "./pages/Learningmodule/MCQgenerator";
 import QuizGenerator from "./pages/Learningmodule/QuizGenerator";
 import SignIn from "./pages/Signin";
+import Login from "./pages/Login";
 
 
 function App() {
@@ -17,9 +18,11 @@ function App() {
   <div>
  <Router>
       {/* <Header />  */}
+      {/* <Login/> */}
       <Routes>
-        {/* Define routes for each page */}
+       
         <Route path="/" element={<Home />} />
+        <Route path="login" element={<Login/>}/>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/learning-modules/mcq-generator" element={<MCQGenerator />} />
