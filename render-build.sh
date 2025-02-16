@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
-cd skillwave  # Change directory to the frontend folder
+
+# Navigate to the backend directory
+cd Backend
+
+# Install dependencies
 npm install
-npm run build
+
+# Start the backend server
+npm start
