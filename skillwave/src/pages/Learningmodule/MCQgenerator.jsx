@@ -5,15 +5,17 @@ import Header from "../../component/Header";
 import Footer from "../../component/Footer";
 import "../../assets/css/MCQgenerator.css";
 
+
 const MCQGenerator = () => {
   const [topic, setTopic] = useState("");
   const [numMCQs, setNumMCQs] = useState(1);
   const [mcqs, setMcqs] = useState([]);
   const [loading, setLoading] = useState(false);
-// sk-842d7b40727f4af386d3ed7b80a1b3da
-  // const API_KEY = "AIzaSyBKWU4aKqSt_AirOzJAjuO3ugYqo8WGk3s"; // Replace with your actual API key
-  // const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
+
  
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For Vite
+  console.log("API Base URL:", API_BASE_URL); 
+
   const handleGenerateMCQs = async () => {
     if (!topic.trim()) {
       alert("Please enter a topic.");
@@ -30,7 +32,7 @@ const MCQGenerator = () => {
     console.log("Sending data:", data);
   
     try {
-      const response = await axios.post("http://localhost:5000/generate-mcqs", data);
+      const response = await axios.post(`${API_BASE_URL}/generate-mcqs`, data);
       console.log("Generated MCQs:", response.data);
       setMcqs(response.data.mcqs);
     } catch (error) {

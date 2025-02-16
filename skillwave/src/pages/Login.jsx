@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+
 import { useNavigate } from "react-router-dom"; 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For Vite
+
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +27,7 @@ const Form = () => {
 
     try {
       // Send login request to the server
-      const response = await axios.post("http://localhost:5000/login", formData);
+      const response = await axios.post(`${API_BASE_URL}/login`, formData);
 
       // If login is successful, redirect to the dashboard
       if (response.data.message === "Login successful!") {

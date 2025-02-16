@@ -28,9 +28,9 @@ const LongShortGenerator = () => {
     };
   
     console.log("Sending data to backend:", data); // Log the payload
-  
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For Vite
     try {
-      const response = await axios.post("http://localhost:5000/generate-long-short-answers", data);
+      const response = await axios.post(`${API_BASE_URL}/generate-long-short-answers`, data);
       console.log("Response from backend:", response.data); // Log the response
       setAnswers(response.data.questions);
       setIsGenerated(true);

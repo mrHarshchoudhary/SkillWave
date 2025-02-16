@@ -23,11 +23,11 @@ const QuizGenerator = () => {
       topic: topic,
       numQuestions: numQuestions,
     };
-
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For Vite
     console.log("Sending data:", data);
 
     try {
-      const response = await axios.post("http://localhost:5000/generate-quiz", data);
+      const response = await axios.post(`${API_BASE_URL}/generate-quiz`, data);
       console.log("Generated Quiz:", response.data);
       setQuiz(response.data.quiz);
     } catch (error) {

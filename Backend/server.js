@@ -4,18 +4,26 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-
+const dotenv=require("dotenv");
 const app = express();
-const PORT = 5000;
+dotenv.config();
+const port=process.env.PORT || 3000
+
 
 // Middleware
 app.use(bodyParser.json());
+app.use(express.json())
 app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Change based on frontend port
+    credentials: true,
+  })
+);
+
 //connect db
-mongoose.connect("mongodb://localhost:27017/userDB",{
-  useNewUrlParser:true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -32,24 +40,27 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 
 // API Endpoint for User Registration
+const bcrypt = require("bcrypt");
+const jwtSecret=process.env.JWT_SECRET
+
 app.post("/register", async (req, res) => {
   const { fullName, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    const newUser = new User({ fullName, email, password });
+    const newUser = new User({ fullName, email, password: hashedPassword });
     await newUser.save();
     res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
     res.status(500).json({ error: "Failed to register user" });
   }
 });
-// API Endpoint for User Login
-// API Endpoint for User Login
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email, password });
-    if (user) {
-      const token = jwt.sign({ userId: user._id }, "harsh@121@121##", { expiresIn: "1h" });
+    const user = await User.findOne({ email });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: "1h" });
       res.status(200).json({ message: "Login successful!", token });
     } else {
       res.status(401).json({ error: "Invalid email or password" });
@@ -58,14 +69,17 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ error: "Failed to login" });
   }
 });
+
 //contextlength kese 
-const GEMINI_API_KEY = "AIzaSyD3x0VzqgWDjkWpQyO9wm_66zZggPafHkg"; 
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent";
+
 
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
+
   next();
 });
+console.log("Gemini API URL:", process.env.GEMINI_API_URL); // Debugging
+console.log("Gemini API Key:", process.env.GEMINI_API_KEY); // Debugging
 app.post("/generate-mcqs", async (req, res) => {
   const { topic, numMCQs } = req.body;
 
@@ -75,7 +89,6 @@ app.post("/generate-mcqs", async (req, res) => {
   }
 
   try {
-    // Construct the payload
     const payload = {
       contents: [
         {
@@ -102,9 +115,10 @@ app.post("/generate-mcqs", async (req, res) => {
       ],
     };
 
-    // Send the request to Gemini AI
+    console.log("Sending payload to Gemini API:", payload); // Debugging
+
     const response = await axios.post(
-      `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+      `${process.env.GEMINI_API_URL}?key=${process.env.GEMINI_API_KEY}`,
       payload,
       {
         headers: {
@@ -113,19 +127,19 @@ app.post("/generate-mcqs", async (req, res) => {
       }
     );
 
-    // Extract the generated content
+    console.log("Gemini API Response:", response.data); // Debugging
+
     const generatedText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    console.log("Generated Text:", generatedText); // Log the raw response
+    console.log("Generated Text:", generatedText); // Debugging
 
     let mcqs;
 
     try {
-      // Extract JSON portion from the response
       const jsonStartIndex = generatedText.indexOf("[");
       const jsonEndIndex = generatedText.lastIndexOf("]") + 1;
       const jsonString = generatedText.slice(jsonStartIndex, jsonEndIndex);
 
-      mcqs = JSON.parse(jsonString); // Parse the extracted JSON string
+      mcqs = JSON.parse(jsonString);
       if (!Array.isArray(mcqs)) {
         throw new Error("Generated MCQs are not in the expected format.");
       }
@@ -134,7 +148,6 @@ app.post("/generate-mcqs", async (req, res) => {
       return res.status(500).json({ error: "Failed to parse generated MCQs." });
     }
 
-    // Send the generated MCQs back in the response
     res.json({ mcqs });
   } catch (error) {
     console.error("Error generating MCQs:", error.response?.data || error.message);
@@ -172,7 +185,7 @@ app.post("/generate-quiz", async (req, res) => {
     };
 
     const response = await axios.post(
-      `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+      `${process.env.GEMINI_API_URL}?key=${process.env.GEMINI_API_KEY}`,
       payload,
       {
         headers: {
@@ -240,7 +253,7 @@ app.post("/generate-long-short-answers", async (req, res) => {
     console.log("Sending payload to Gemini API:", payload);
 
     const response = await axios.post(
-      `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+      `${process.env.GEMINI_API_URL}?key=${process.env.GEMINI_API_KEY}`,
       payload,
       {
         headers: {
@@ -255,8 +268,14 @@ app.post("/generate-long-short-answers", async (req, res) => {
     let questions;
 
     try {
-      // Extract JSON array using regex to avoid invalid text
-      const jsonMatch = generatedText.match(/\[.*\]/s); // Match everything between the first "[" and last "]"
+      // Sanitize the JSON string by removing invalid characters
+      const sanitizedText = generatedText
+        .replace(/[\u0000-\u001F]/g, "") // Remove control characters
+        .replace(/\\n/g, "") // Remove escaped newlines
+        .replace(/\\t/g, ""); // Remove escaped tabs
+
+      // Extract JSON array using regex
+      const jsonMatch = sanitizedText.match(/\[.*\]/s); // Match everything between the first "[" and last "]"
       if (!jsonMatch) {
         throw new Error("No valid JSON array found in API response.");
       }
@@ -300,7 +319,12 @@ app.get("/user", async (req, res) => {
 });
 // Start the server
 console.log(`token error`);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Internal Server Error" });
+});
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });

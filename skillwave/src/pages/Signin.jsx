@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // For Vite
+
+
 const Signup = ({ onSuccessfulRegistration, toggleLoginModal }) => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -19,17 +23,26 @@ const Signup = ({ onSuccessfulRegistration, toggleLoginModal }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/register", formData);
+      
+      
+      console.log("Sending request to:", `${API_BASE_URL}/register`);
+      console.log("Request payload:", formData);
+  
+      const response = await axios.post(`${API_BASE_URL}/register`, formData);
       console.log("Backend response:", response.data);
+  
       setResponseMessage(response.data.message);
-      onSuccessfulRegistration(); // Call the function to handle successful registration
+      onSuccessfulRegistration();
     } catch (error) {
-      console.error("Error during registration:", error); // Log the full error
+      console.error("Error during registration:", error);
+      console.error("Error response:", error.response); // Log full response
+  
       setResponseMessage(
         error.response?.data?.error || "Something went wrong, please try again!"
       );
     }
   };
+  
 
   return (
     <StyledWrapper>
