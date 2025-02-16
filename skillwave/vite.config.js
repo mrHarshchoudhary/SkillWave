@@ -1,7 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  root: '.', // Set the root to the correct directory
+  build: {
+    outDir: 'dist', // Ensure it builds inside `skillwave/dist`
+    emptyOutDir: true, // Clean the output directory before building
+  },
+});
