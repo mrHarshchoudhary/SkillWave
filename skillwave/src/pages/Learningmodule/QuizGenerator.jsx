@@ -3,7 +3,7 @@ import axios from "axios";
 import Header from "../../component/Header";
 import Footer from "../../component/Footer";
 import { jsPDF } from "jspdf";
-import "../../assets/css/QuizGenerator.css";
+import "../../assets/css/Quizgenerator.css";
 
 const QuizGenerator = () => {
   const [topic, setTopic] = useState("");
